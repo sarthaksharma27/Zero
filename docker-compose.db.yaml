@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: zerodotemail
+      POSTGRES_DB: zerodotemailtest
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - 5432:5432
