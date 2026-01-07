@@ -196,7 +196,7 @@ export const autumnApi = new Hono<AutumnContext>()
       await autumn!.entities.delete(customerData.customerId, entityId).then((data) => data.data),
     );
   })
-  .get('/components/pricing_table', async (c) => {
+  .get('/components/pricing_table/', async (c) => {
     const { autumn, customerData } = c.var;
 
     return c.json(
@@ -208,3 +208,24 @@ export const autumnApi = new Hono<AutumnContext>()
       }).then((data) => data.data),
     );
   });
+
+.get('/subscriptions', async (c) => {
+  const { autumn, customerData } = c.var;
+
+  if (!customerData) {
+    return c.json(
+      { error: 'unauthorized', message: 'No customer ID found' },
+      401,
+    );
+  }
+
+  const status = c.req.query('status'); // optional filter
+
+  const result = await autumn!.subscriptions.list({
+    customer_id: customerData.customerId,
+    status,
+  });
+
+  return c.json(result.data);
+});
+
