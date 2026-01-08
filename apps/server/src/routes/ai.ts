@@ -69,6 +69,44 @@ aiRouter.post('/do/:action', async (c) => {
   }
 });
 
+aiRouter.post('/do/:action', async (c) => {
+  const action = c.req.param('action')
+  const body = await c.req.json();
+  ...
+  const result = await tool.execute?.(body || {})
+})
+
+const ActionContracts = {
+  inbox_rag: {
+    description: 'Searches inbox messages using semantic retrieval',
+    input: z.object({
+      query: z.string(),
+    }),
+    output: z.object({
+      messages: z.array(
+        z.object({
+          id: z.string(),
+          subject: z.string(),
+          snippet: z.string(),
+        })
+      ),
+    }),
+  },
+  send_email: {
+    description: 'Sends an email on behalf of the user',
+    input: z.object({
+      to: z.string().email(),
+      subject: z.string(),
+      body: z.string(),
+    }),
+    output: z.object({
+      success: z.boolean(),
+      messageId: z.string(),
+    }),
+  },
+} as const;
+
+
 aiRouter.post('/call', async (c) => {
   console.log('[DEBUG] Received call request');
 
